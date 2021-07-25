@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		},
+		{
+			"path": "./view",
+		},
+		{
+			"path": "./api",
+		}
+	],
+	"settings": {}
+}
