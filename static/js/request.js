@@ -33,7 +33,7 @@ AJAX = {
                     // cSystemCall.notify(data, `status is outside: ${xmlhttp.status}`);
                 }
             } catch (e) {
-                console.log(e);
+                console.log("xmlhttp error response:", xmlhttp.responseText);
             }
         }
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
