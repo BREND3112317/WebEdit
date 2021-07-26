@@ -18,8 +18,9 @@ exports.list_folder = function(req, res) {
                     }
                 }
             )
+            return ;
         }
-        files.forEach( function (file){
+        files.forEach( function (file) {
             data.dirents.push(file);
         });
         res.json(data)

@@ -16,40 +16,30 @@
         .main-page {
             height: 100vh;
         }
-
-        .editor-container {
-            height: 95vh;
-        }
-
-        .editor {
-            border-width: 2px;
-            border-style: solid;
-            border-color: #000;
-            height: 100%;
-        }
     </style>
 </head>
 <body>
-    <div class="main-page container-fluid">
-        <div class="editor-container">
-            <div id="editor" class="editor">
-            
-            </div>
-        </div>
+    <div class="main-page container">
+        
     </div>    
-    <sctipt src="../static/js/request.js"></sctipt>
     <script>
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
+        document.addEventListener("DOMContentLoaded", function () {
+            AJAX.get(
+                "/api/folder/..%2F", 
+                {
+                    success: function (data) {
+                        console.log(data);
+                        cSystemCall.notify(data, "folder list");
+                    }
+                }
+            );
+        })
     </script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
-    <script>
-        var editor = monaco.editor.create(document.getElementById('editor'), {
-			value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-			language: 'javascript'
-		});
-    </script>
+    <script type="text/javascript" src="/static/js/request.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
 </body>
 </html>

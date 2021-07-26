@@ -27,7 +27,7 @@ app.get('/demo/monaco-script-demo.html', function (req, res) {
 var routes = require('./api/routes/FFSystemRoutes');
 routes(app);
 
-
+app.use('/static', express.static( __dirname + "/static" ));
 app.use('/node_modules', express.static( __dirname + "/" + "node_modules" ));
 
 app.listen(port, () => {
