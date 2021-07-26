@@ -29,6 +29,9 @@ routes(app);
 
 app.use('/static', express.static( __dirname + "/static" ));
 app.use('/node_modules', express.static( __dirname + "/" + "node_modules" ));
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile( __dirname + "/" + "favicon.ico" );
+})
 
 app.listen(port, () => {
   console.log(`[System] listening at http://localhost:${port}`)
