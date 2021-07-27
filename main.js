@@ -3,16 +3,21 @@ const os = require('os')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => {
-  res.send(os)
-})
+// app.get('/', (req, res) => {
+//   res.send(os)
+// })
 
 app.get('/', function (req, res) {
-   res.sendFile( __dirname + "/view/" + "main.html" );
+   res.sendFile( __dirname + "/view/" + "FileView.html" );
 })
 
+//todo: 整合同一個畫面顯示所有demo
 app.get('/FileFolderSystem', function (req, res) {
   res.sendFile(__dirname + "/view/" + "FFS.html");
+})
+
+app.get('/MonacoDemo', function (req, res) {
+  res.sendFile(__dirname + "/view/" + "MonacoDemo.html");
 })
 
 app.get('/demo/monaco-script-demo.html', function (req, res) {

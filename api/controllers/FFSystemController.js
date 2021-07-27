@@ -3,8 +3,6 @@
 const fs = require('fs')
 const path = require('path')
 
-
-
 exports.list_folder = function(req, res) {
     // console.log("[list_folder] echo: req = ", req)
     var dir = decodeURIComponent(req.params.path);
@@ -28,8 +26,46 @@ exports.list_folder = function(req, res) {
             file_class.isFolder = file.isDirectory();
             data.dirents.push(file_class);
         });
-        res.json(data)
+        // res.json(data)
+        send(res, data, 0);
     });
+}
+
+exports.read_file = function (req, res) {
+    var file = decodeURIComponent(req.params.path);
+    fs.readFile(file, function (err, data) {
+        if(err) {
+            res.json(
+                {
+                    "status": "error",
+                    "response": {
+                        "err": err
+                    }
+                }
+            )
+            return ;
+        }
+        // res.json(data)
+        send(res, data.toString(), 0);
+    });
+}
+
+exports.write_file = function(req, res) {
+    var file = decodeURIComponent(req.params.path);
+    console.log("[TEST] write_file POST: ", req.body)
+    send(res, {}, 0);
+}
+
+function send(res, data = {}, statusCode = -1) {
+    var json_data = {}
+    json_data.data = data;
+    json_data.code = statusCode;
+    if(statusCode >= 0) {
+        json_data.status = "success";
+    } else {
+        json_data.status = "failed";
+    }
+    res.json(json_data);
 }
 
 // exports.list_folder = function(req, res) {

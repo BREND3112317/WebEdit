@@ -20,10 +20,10 @@ AJAX = {
                 data = JSON.parse(xmlhttp.responseText);
                 if(xmlhttp.status >= 200 && xmlhttp.status < 300) {
                     if(typeof callback.success !== 'undefined') {
-                        callback.success(data);
+                        callback.success(data.data);
                     }else {
                         if(typeof callback.failed !== 'undefined') {
-                            callback.failed(data);
+                            callback.failed(data.data);
                         } else {
                             cSystemCall.notify(data, "callback.failed is undefined");
                         }
@@ -33,6 +33,7 @@ AJAX = {
                     // cSystemCall.notify(data, `status is outside: ${xmlhttp.status}`);
                 }
             } catch (e) {
+                console.log("xmlhttp error:", e);
                 console.log("xmlhttp error response:", xmlhttp.responseText);
             }
         }

@@ -22,6 +22,17 @@
         .list-group-item {
             width: 100%;
         }
+
+        .editor-container {
+            height: 60vh;
+        }
+
+        .editor {
+            border-width: 2px;
+            border-style: solid;
+            border-color: #000;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -32,23 +43,29 @@
             </svg>
             <h1 class="display-2 mb-0 px-3">WebEdit</h1>
         </div>
-        <h1 class="display-3">Folder List Demo - File Folder System</h1>
+        <h1 class="display-3">File View</h1>
     </div>
     <div class="container">
         <div class="d-flex justify-content-center align-items-center mb-3">
             <div class="input-group mt-3">
-                <span class="input-group-text alert-primary" id="api">http://127.0.0.1:3000/api/folder/</span>
-                <input type="text" class="form-control" id="api-url" aria-describedat="api" value="./">
+                <span class="input-group-text alert-primary" id="api">http://127.0.0.1:3000/api/file/</span>
+                <input type="text" class="form-control" id="api-url" aria-describedat="api" value="./package.json">
                 <button class="btn btn-outline-primary" type="button" id="call-api">GET</button>
             </div>
         </div>
-        <div class="d-flex justify-content-center align-items-start">
-            <ul id="menu" class="list-group list-group-flush d-flex flex-column justify-content-center align-items-start"></div>
+        <div class="editor-container">
+            <div id="edit-main" class="editor"></div>
         </div>
     </div>    
+    <script type="text/javascript" src="/static/js/request.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
     <script>
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
-        var folderAPI_url = "http://127.0.0.1:3000/api/folder/";
+        var folderAPI_url = "http://127.0.0.1:3000/api/file/";
         document.addEventListener("DOMContentLoaded", function () {
             console.log(document.getElementById("call-api"));
             document.getElementById("call-api").addEventListener("click", function () {
@@ -64,25 +81,23 @@
                 folderAPI_url + encodeURIComponent(api_url.value), 
                 {
                     success: function (data) {
-                        cSystemCall.notify(data, "folder list");
-                        var menu = document.getElementById("menu")
-                        menu.innerHTML = "";
-                        for(var i in data.dirents) {
-                            var new_li = document.createElement("li");
-                            new_li.className = "list-group-item"
-                            new_li.innerHTML = `${data.dirents[i].isFolder ? `<i class="far fa-folder me-1"></i>` : `<i class="far fa-file me-1"></i>`}${data.dirents[i].name}`
-                            menu.append(new_li);
-                        }
+                        cSystemCall.notify(data, "read file");
+                        var lang = api_url.value.split('.').pop();
+                        var data_value = data.split('\r\n');
+                        console.log(data_value)
+                        var main_editor = document.getElementById('edit-main');
+                        main_editor.innerHTML = "";
+                        var editor = monaco.editor.create(main_editor, {
+                            value: data_value.join('\n'), 
+                        });
+                        // var main = document.getElementById("edit-main")
+                        // main.innerHTML = data;
                     }
                 }
             );
         }
+
+        
     </script>
-    <script type="text/javascript" src="/static/js/request.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
-    <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
-    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
-    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
 </body>
 </html>

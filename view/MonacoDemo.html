@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" http-equiv="Content-Type" content="width=device-width, initial-scale=1.0">
     <title>Main - WebCoding</title>
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link
 		rel="stylesheet"
 		data-name="vs/editor/editor.main"
-		href="../node_modules/monaco-editor/min/vs/editor/editor.main.css"
+		href="/node_modules/monaco-editor/min/vs/editor/editor.main.css"
 	/>
 
     <style>
@@ -41,10 +41,10 @@
     <script>
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
     </script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
-    <script src="../node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+    <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
     <script>
         var editor = monaco.editor.create(document.getElementById('editor'), {
 			value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
