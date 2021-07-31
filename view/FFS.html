@@ -59,9 +59,12 @@
 
         callAPI = function () {
             var api_url = document.getElementById("api-url");
-            // console.log("test", folderAPI_url + encodeURIComponent(api_url.value), );
+            var encode_data = api_url_encode(api_url.value)
+            console.log(encode_data);
+            // return;
+            // console.log("test", folderAPI_url + encode_data, );
             AJAX.get(
-                folderAPI_url + encodeURIComponent(api_url.value), 
+                folderAPI_url + encode_data, 
                 {
                     success: function (data) {
                         cSystemCall.notify(data, "folder list");
@@ -78,11 +81,13 @@
             );
         }
     </script>
-    <script type="text/javascript" src="/static/js/request.js"></script>
+    <script src="/node_modules/js-base64/base64.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
     <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
     <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
     <script src="/node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+    <script type="text/javascript" src="/static/js/coding.js"></script>
+    <script type="text/javascript" src="/static/js/request.js"></script>
 </body>
 </html>

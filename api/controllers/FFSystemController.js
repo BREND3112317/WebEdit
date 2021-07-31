@@ -2,21 +2,21 @@
 
 const fs = require('fs')
 const path = require('path')
+const Base64 = require('js-base64')
 
-exports.list_folder = function(req, res) {
-    // console.log("[list_folder] echo: req = ", req)
-    var dir = decodeURIComponent(req.params.path);
-    var data = {"dirents": []};
+exports.path_info = function(req, res) {
+    var _path = path.resolve(api_url_decode(req.params.path));
+    var data = {"parse": {}};
+    data.parse = path.parse(_path);
+    send(res, data, 0);
+}
+
+exports.folder_list = function(req, res) {
+    var dir = path.resolve(api_url_decode(req.params.path));
+    var data = {"dirents": [], "parse": {}};
     fs.readdir(dir, { withFileTypes: true }, function(err, files){
         if (err) { // todo: 可引用 fs.stat or fs.access 來判別錯誤方向 http://nodejs.cn/api/fs.html#fs_fs_stat_path_options_callback
-            res.json(
-                {
-                    "status": "error",
-                    "response": {
-                        "err": err
-                    }
-                }
-            )
+            send(res, {"err": err});
             return ;
         }
         files.forEach( function (file) {
@@ -26,32 +26,29 @@ exports.list_folder = function(req, res) {
             file_class.isFolder = file.isDirectory();
             data.dirents.push(file_class);
         });
+        data.parse = path.parse(dir);
         // res.json(data)
         send(res, data, 0);
     });
 }
 
 exports.read_file = function (req, res) {
-    var file = decodeURIComponent(req.params.path);
+    var file = path.resolve(api_url_decode(req.params.path));
+    var pre_data = {"text": "", parse: {}}
     fs.readFile(file, function (err, data) {
         if(err) {
-            res.json(
-                {
-                    "status": "error",
-                    "response": {
-                        "err": err
-                    }
-                }
-            )
+            send(res, {"err": err});
             return ;
         }
         // res.json(data)
-        send(res, data.toString(), 0);
+        pre_data.text = data.toString()
+        pre_data.parse = path.parse(file);
+        send(res, pre_data, 0);
     });
 }
 
 exports.write_file = function(req, res) {
-    var file = decodeURIComponent(req.params.path);
+    var file = path.resolve(api_url_decode(req.params.path));
     console.log("[TEST] write_file POST: ", req.body)
     send(res, {}, 0);
 }
@@ -68,19 +65,6 @@ function send(res, data = {}, statusCode = -1) {
     res.json(json_data);
 }
 
-// exports.list_folder = function(req, res) {
-//     res.json(req.params)
-//     console.log("[list_folder] echo: req = ", req)
-//     var data = {"dirents": []};
-//     opendir_List(decodeURIComponent(req.params.path), function (dir) {
-//         for (const dirent of dir) {
-//             data.dirents.push(dirent.name);
-//         }
-//     })
-//     // res.send()
-//     // console.log("[list_folder] echo: req.params Decode = ", decodeURIComponent(req.params.path))
-//     async function opendir_List(path, callback) {
-//         const dir = fs.opendirSync(path);
-//         callback(dir);
-//     }
-// }
+function api_url_decode(url) {
+    return Base64.decode(url);
+}

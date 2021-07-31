@@ -1,10 +1,12 @@
 'use strict';
 
-module.exports = function(app) {
-    var FFS_List = require('../controllers/FFSystemController');
+var name_regex = "0-9a-zA-Z\-\=\_";
 
-    app.route('/api/folder/:path([0-9a-zA-Z\/\%\.\-]+)').get(FFS_List.list_folder);
-    app.route('/api/file/:path([0-9a-zA-Z\/\%\.\-]+)')
-        .get(FFS_List.read_file)
-        .post(FFS_List.write_file);
+module.exports = function(app) {
+    var FFS = require('../controllers/FFSystemController');
+    app.route(`/api/path/:path([${name_regex}]+)`).get(FFS.path_info);
+    app.route(`/api/folder/:path([${name_regex}]+)`).get(FFS.folder_list);
+    app.route(`/api/file/:path([${name_regex}]+)`)
+        .get(FFS.read_file)
+        .post(FFS.write_file);
 }

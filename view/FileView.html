@@ -43,7 +43,7 @@
             </svg>
             <h1 class="display-2 mb-0 px-3">WebEdit</h1>
         </div>
-        <h1 class="display-3">File View</h1>
+        <h1 class="display-3">File View</i></h1>
     </div>
     <div class="container">
         <div class="d-flex justify-content-center align-items-center mb-3">
@@ -72,6 +72,7 @@
                 callAPI();
             })
             callAPI();
+            console.log(octicons.alert);
         })
 
         callAPI = function () {
@@ -90,8 +91,6 @@
                         var editor = monaco.editor.create(main_editor, {
                             value: data_value.join('\n'), 
                         });
-                        // var main = document.getElementById("edit-main")
-                        // main.innerHTML = data;
                     }
                 }
             );
