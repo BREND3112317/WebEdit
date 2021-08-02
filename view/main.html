@@ -34,7 +34,7 @@
             border-style: solid;
             border-color: transparent;
             box-shadow: 0px 14px 80px rgb(34 35 58 / 20%);
-            padding: 25px;
+            padding: 25px 0px;
             border-radius: 25px;
         }
 
@@ -114,6 +114,20 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
+        .main-toolBar {
+            height: 5rem;
+        }
+
+        .header-main {
+            min-width: 10rem;
+            font-size: 2rem;
+        }
+
+        .header-items > *{
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -166,7 +180,26 @@
                 </ul>
             </div>
         </div>
-        <div class="main-container container-fluid d-flex flex-column justify-content-center align-items-center w-100 h-100">
+        <div class="main-container container-fluid d-flex flex-column justify-content-between align-items-center w-100 h-100">
+            <div class="container-fluid main-header d-flex flex-row pt-4">
+                <span id="my-file-name" class="header-main"></span>
+                <div class="header-items d-flex align-items-center">
+                    <button id="reload-file" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8 2.5a5.487 5.487 0 00-4.131 1.869l1.204 1.204A.25.25 0 014.896 6H1.25A.25.25 0 011 5.75V2.104a.25.25 0 01.427-.177l1.38 1.38A7.001 7.001 0 0114.95 7.16a.75.75 0 11-1.49.178A5.501 5.501 0 008 2.5zM1.705 8.005a.75.75 0 01.834.656 5.501 5.501 0 009.592 2.97l-1.204-1.204a.25.25 0 01.177-.427h3.646a.25.25 0 01.25.25v3.646a.25.25 0 01-.427.177l-1.38-1.38A7.001 7.001 0 011.05 8.84a.75.75 0 01.656-.834z"></path></svg>
+                    </button>
+                    <div class="btn-group">
+                        <button class="btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <button id="save-file" class="btn">
+                        Save
+                    </button>
+                </div>
+            </div>
             <div class="container py-4">
                 <div class="editor-container">
                     <div id="edit-main" class="editor d-flex flex-column justify-content-center align-item-center">
@@ -191,20 +224,27 @@
     <script type="text/javascript" src="/static/js/coding.js"></script>
     <script type="text/javascript" src="/static/js/request.js"></script>
     <script>
-        var test;
+        var test, my_editor;
 
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
         var file_api_url = "http://127.0.0.1:3000/api/file/";
         var folder_api_url = "http://127.0.0.1:3000/api/folder/";
         document.addEventListener("DOMContentLoaded", function () {
             console.log(document.getElementById("call-api"));
-            setFolderContent("/")
+            building()
+            setFolderContent("./")
             // callAPI();
         })
 
         building = function () {
-            document.getElementById("call-api").addEventListener("click", function () {
-                callAPI();
+            // document.getElementById("call-api").addEventListener("click", function () {
+            //     callAPI();
+            // })
+            document.getElementById("save-file").addEventListener("click", function () {
+                pre_saveFile();
+            })
+            document.getElementById("reload-file").addEventListener("click", function () {
+                pre_reloadFile();
             })
         }
 
@@ -308,16 +348,52 @@
                     success: function(data) {
                         cSystemCall.notify(data, "setEditorContent");
                         var main_editor = document.getElementById('edit-main');
+                        // console.log("test", `${data.parse.dir}\\${data.parse.base}`)
+                        main_editor.setAttribute("data-full-path", `${data.parse.dir}\\${data.parse.base}`)
                         main_editor.innerHTML = "";
                         var editor = monaco.editor.create(main_editor, {
                             value: data.text, 
                         });
+                        my_editor = editor;
+                        document.getElementById('my-file-name').innerHTML = data.parse.base;
+                        console.log(editor.getValue());
                     }
                 }
             )
         }
 
-        getFileContent = function (filePath) {
+        pre_reloadFile = function () {
+            var filePath = document.getElementById("edit-main").getAttribute("data-full-path");
+            if(filePath == null)return ;
+            setEditorContent(filePath);
+        }
+
+        pre_saveFile = function () {
+            var filePath = document.getElementById("edit-main").getAttribute("data-full-path");
+            if(filePath == null)return ;
+            var data = {
+                "filePath": filePath,
+                "content": my_editor.getValue()
+            }
+            saveFile(data)
+        }
+
+        saveFile = function (data) {
+            console.log(data);
+            AJAX.post(
+                file_api_url + api_url_encode(data.filePath),
+                {
+                    "content": data.content
+                },
+                {
+                    success: function(data) {
+                        cSystemCall.notify(data, "setEditorContent");
+                    }
+                }
+            )
+        }
+
+        getFileContent = function (callback) {
 
         }
 

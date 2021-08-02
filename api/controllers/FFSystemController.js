@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const Base64 = require('js-base64')
+const Buffer = require('buffer');
 
 exports.path_info = function(req, res) {
     var _path = path.resolve(api_url_decode(req.params.path));
@@ -49,8 +50,15 @@ exports.read_file = function (req, res) {
 
 exports.write_file = function(req, res) {
     var file = path.resolve(api_url_decode(req.params.path));
-    console.log("[TEST] write_file POST: ", req.body)
-    send(res, {}, 0);
+    // console.log("[TEST] write_file POST: ", req.body)
+    // send(res, {"req": }, 0);
+    fs.writeFile(file, req.body.content, function (err) {
+        if (err)
+            console.log(err);
+        else
+            console.log('Write operation complete.');
+    });
+    send(res, {"path": file, "content": req.body}, 0);
 }
 
 function send(res, data = {}, statusCode = -1) {
