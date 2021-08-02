@@ -227,8 +227,10 @@
         var test, my_editor;
 
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
-        var file_api_url = "http://127.0.0.1:3000/api/file/";
-        var folder_api_url = "http://127.0.0.1:3000/api/folder/";
+        // var file_api_url = "http://127.0.0.1:3000/api/file/";
+        // var folder_api_url = "http://127.0.0.1:3000/api/folder/";
+        var file_api_url = "/api/file/";
+        var folder_api_url = "/api/folder/";
         document.addEventListener("DOMContentLoaded", function () {
             console.log(document.getElementById("call-api"));
             building()
