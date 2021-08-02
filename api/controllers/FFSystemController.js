@@ -21,14 +21,12 @@ exports.folder_list = function(req, res) {
             return ;
         }
         files.forEach( function (file) {
-            // console.log(file);
             var file_class = {};
             file_class.name = file.name;
             file_class.isFolder = file.isDirectory();
             data.dirents.push(file_class);
         });
         data.parse = path.parse(dir);
-        // res.json(data)
         send(res, data, 0);
     });
 }
@@ -41,7 +39,6 @@ exports.read_file = function (req, res) {
             send(res, {"err": err});
             return ;
         }
-        // res.json(data)
         pre_data.text = data.toString()
         pre_data.parse = path.parse(file);
         send(res, pre_data, 0);
@@ -50,8 +47,6 @@ exports.read_file = function (req, res) {
 
 exports.write_file = function(req, res) {
     var file = path.resolve(api_url_decode(req.params.path));
-    // console.log("[TEST] write_file POST: ", req.body)
-    // send(res, {"req": }, 0);
     fs.writeFile(file, req.body.content, function (err) {
         if (err)
             console.log(err);
@@ -62,6 +57,7 @@ exports.write_file = function(req, res) {
 }
 
 function send(res, data = {}, statusCode = -1) {
+    console.log(`[System] [Send Json] `, ` [code: ${statusCode}]: `, data);
     var json_data = {}
     json_data.data = data;
     json_data.code = statusCode;
