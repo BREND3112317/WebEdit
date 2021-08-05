@@ -227,21 +227,14 @@
         var test, my_editor;
 
         var require = { paths: { vs: './node_modules/monaco-editor/min/vs' } };
-        // var file_api_url = "http://127.0.0.1:3000/api/file/";
-        // var folder_api_url = "http://127.0.0.1:3000/api/folder/";
         var file_api_url = "/api/file/";
         var folder_api_url = "/api/folder/";
         document.addEventListener("DOMContentLoaded", function () {
-            console.log(document.getElementById("call-api"));
             building()
             setFolderContent("./")
-            // callAPI();
         })
 
         building = function () {
-            // document.getElementById("call-api").addEventListener("click", function () {
-            //     callAPI();
-            // })
             document.getElementById("save-file").addEventListener("click", function () {
                 pre_saveFile();
             })
@@ -255,7 +248,6 @@
                 folder_api_url + api_url_encode(folderPath),
                 {
                     success: function(data) {
-                        // console.log(data);
                         cSystemCall.notify(data, "setFolderContent");
                         var folder_breadcrumb = document.querySelector("#Folder-title > nav > ol")
                         var dirs = data.parse.dir.split("\\");
@@ -267,7 +259,7 @@
                             li_item.className = "breadcrumb-item ps-3"
                             li_item.innerHTML = `
                                 <i class="fas fa-server"></i>
-                                <span>${dirs[0]}</span>
+                                ${dirs[0] == "/" ? `` : `<span>${dirs[0]}</span>`}
                             `//<span>${dirs[0].split(":")[0]}</span>
                             folder_breadcrumb.append(li_item)
                             li_item.setAttribute("data-folder-path", full_path);
@@ -351,7 +343,7 @@
                         cSystemCall.notify(data, "setEditorContent");
                         var main_editor = document.getElementById('edit-main');
                         // console.log("test", `${data.parse.dir}\\${data.parse.base}`)
-                        main_editor.setAttribute("data-full-path", `${data.parse.dir}\\${data.parse.base}`)
+                        main_editor.setAttribute("data-full-path", `${data.parse.dir}/${data.parse.base}`)
                         main_editor.innerHTML = "";
                         var editor = monaco.editor.create(main_editor, {
                             value: data.text, 
