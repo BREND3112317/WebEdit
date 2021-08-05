@@ -1,4 +1,4 @@
-server {
+test {
     listen       80;
     server_name  beto.brlin.org;
     access_log   /var/log/nginx/${server_name}_access.log;

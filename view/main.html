@@ -343,7 +343,7 @@
                         cSystemCall.notify(data, "setEditorContent");
                         var main_editor = document.getElementById('edit-main');
                         // console.log("test", `${data.parse.dir}\\${data.parse.base}`)
-                        main_editor.setAttribute("data-full-path", `${data.parse.dir}\\${data.parse.base}`)
+                        main_editor.setAttribute("data-full-path", `${data.parse.dir}/${data.parse.base}`)
                         main_editor.innerHTML = "";
                         var editor = monaco.editor.create(main_editor, {
                             value: data.text, 
